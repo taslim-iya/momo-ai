@@ -388,6 +388,8 @@ function seededRandom(seed: string): () => number {
 
 // --- Backend wiring ---
 
+import { supabase } from "@/integrations/supabase/client";
+
 const BACKEND_URL: string | undefined = (() => {
   // Vite exposes env vars prefixed with VITE_ via import.meta.env.
   const raw = (import.meta as unknown as { env?: Record<string, string> }).env
@@ -396,7 +398,45 @@ const BACKEND_URL: string | undefined = (() => {
 })();
 
 export function backendMode(): "live" | "mock" {
-  return BACKEND_URL ? "live" : "mock";
+  // Lovable Cloud edge function `companies-house-lookup` is always available
+  // when Cloud is enabled, so treat the backend as live by default.
+  return "live";
+}
+
+async function lookupViaCloudFunction(
+  raw: string,
+): Promise<CompaniesHouseCompany | null> {
+  try {
+    const { data, error } = await supabase.functions.invoke(
+      "companies-house-lookup",
+      { body: null, method: "GET" } as never,
+    );
+    // supabase.functions.invoke doesn't support query string nicely on GET
+    // across versions, so call fetch directly instead.
+    void data; void error;
+  } catch { /* fallthrough */ }
+
+  try {
+    const SUPABASE_URL = (import.meta as unknown as { env?: Record<string, string> })
+      .env?.VITE_SUPABASE_URL;
+    const ANON_KEY = (import.meta as unknown as { env?: Record<string, string> })
+      .env?.VITE_SUPABASE_PUBLISHABLE_KEY;
+    if (!SUPABASE_URL || !ANON_KEY) return null;
+    const url = `${SUPABASE_URL}/functions/v1/companies-house-lookup?q=${encodeURIComponent(raw)}`;
+    const resp = await fetch(url, {
+      headers: {
+        apikey: ANON_KEY,
+        Authorization: `Bearer ${ANON_KEY}`,
+        accept: "application/json",
+      },
+    });
+    if (!resp.ok) return null;
+    const data = (await resp.json()) as BackendCompanyResponse & { error?: string };
+    if (data?.error || !data?.company_number) return null;
+    return mapBackendCompany(raw, data);
+  } catch {
+    return null;
+  }
 }
 
 interface BackendCompanyResponse {
@@ -536,10 +576,13 @@ export async function lookupCompaniesHouse(
     return known;
   }
 
-  // 2. Live backend. Two paths, tried in order:
+  // 2. Lovable Cloud edge function (real Companies House API).
+  const cloud = await lookupViaCloudFunction(trimmed);
+  if (cloud) return cloud;
+
+  // 3. Legacy backends, tried in order:
   //    a) VITE_PRICING_API_URL when explicitly set (dev/Python FastAPI).
-  //    b) Same-origin /api/company/{id} when deployed alongside a
-  //       serverless function (Vercel / Netlify / Cloudflare Pages).
+  //    b) Same-origin /api/company/{id} (Vercel / Netlify / CF Pages).
   if (BACKEND_URL) {
     const live = await lookupViaBackend(trimmed);
     if (live) return live;
@@ -547,12 +590,9 @@ export async function lookupCompaniesHouse(
   const sameOrigin = await lookupViaSameOrigin(trimmed);
   if (sameOrigin) return sameOrigin;
 
-  // 3. Deterministic mock keyed off the normalised number, so any
-  //    8-character input still produces something reasonable.
+  // 4. Deterministic mock keyed off the normalised number.
   const num = normaliseCompanyNumber(trimmed);
   if (!isValidCompanyNumberFormat(num)) return null;
-  if (!BACKEND_URL) {
-    await new Promise((r) => setTimeout(r, 650));
-  }
+  await new Promise((r) => setTimeout(r, 400));
   return lookupMock(num);
 }
