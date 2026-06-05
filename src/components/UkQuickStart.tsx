@@ -59,7 +59,9 @@ export function UkQuickStart({
 
   const reset = () => {
     setNumber("");
+    setWebsite("");
     setCompany(null);
+    setEnrichment(null);
     setQuote(null);
     setRefineOpen(false);
     setError(null);
@@ -75,17 +77,21 @@ export function UkQuickStart({
     if (override) setNumber(override);
     setLoading(true);
     try {
-      const co = await lookupCompaniesHouse(query);
+      const [co, enriched] = await Promise.all([
+        lookupCompaniesHouse(query),
+        website.trim() ? enrichFromWebsite(website) : Promise.resolve(null),
+      ]);
       if (!co) {
         setError("Couldn't find that company. Try one of the demo numbers below, a valid 8-character CH number (e.g. 12345678 / SC123456), or use the full form.");
         return;
       }
       setCompany(co);
+      setEnrichment(enriched);
       // Build a partial lead for indicative pricing - confidence "low".
-      const partialInput = buildPartialInput(co);
+      const partialInput = buildPartialInput(co, enriched);
       const partialReport = generateReport(partialInput);
       const partialLead = createLeadFromAnalysis(partialInput, partialReport);
-      setQuote(buildRangedQuote(partialLead, "low"));
+      setQuote(buildRangedQuote(partialLead, enriched ? "medium" : "low"));
     } catch {
       setError("Lookup failed. Please try again or use the full form below.");
     } finally {
