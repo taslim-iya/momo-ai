@@ -70,6 +70,7 @@ export default {
         "fade-in": { from: { opacity: "0", transform: "translateY(8px)" }, to: { opacity: "1", transform: "translateY(0)" } },
         "fade-in-slow": { from: { opacity: "0" }, to: { opacity: "1" } },
         "shimmer": { "0%": { backgroundPosition: "-200% 0" }, "100%": { backgroundPosition: "200% 0" } },
+        "shimmer-sweep": { "0%": { transform: "translateX(-100%) skewX(-25deg)" }, "100%": { transform: "translateX(400%) skewX(-25deg)" } },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
