@@ -105,9 +105,10 @@ export function UkQuickStart({
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast.error("Add a valid work email."); return; }
 
     const input: AnalysisInput = {
-      ...buildPartialInput(company),
+      ...buildPartialInput(company, enrichment),
       contactName: contactName.trim(),
       email: email.trim(),
+      website: website.trim() || enrichment?.url || company.websiteGuess || "",
       revenueRange: revenue || undefined,
       employeeCount: employees || undefined,
       sellsToUS,
