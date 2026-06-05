@@ -1,17 +1,5 @@
 import { Sparkles, Play } from "lucide-react";
 import { Eyebrow } from "@/components/atlas/Bits";
-import {
-  backendMode,
-  lookupCompaniesHouse,
-  type CompaniesHouseCompany,
-} from "@/lib/companiesHouse";
-import { generateReport, type AnalysisInput, type Report } from "@/lib/analyzer";
-import { createLeadFromAnalysis, type Lead } from "@/lib/leads";
-import { buildRangedQuote, formatGBP, type RangedQuote } from "@/lib/pricing";
-import { suggestSlots, type Slot } from "@/lib/scheduler";
-import { renderWelcomeWithQuote, renderRenewalReminder } from "@/lib/messages";
-import { BackendStatusBanner } from "@/components/BackendStatusBanner";
-import { cn } from "@/lib/utils";
 
 export default function WatchDemo() {
   return (
