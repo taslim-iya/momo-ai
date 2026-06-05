@@ -7,33 +7,100 @@ import { HeroDashboard } from "@/components/atlas/HeroDashboard";
 export default function Home() {
   return (
     <>
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-paper">
-        <div className="absolute inset-0 bg-grid-light opacity-40" />
-        <div className="absolute -top-40 -right-40 h-[560px] w-[560px] rounded-full bg-accent/20 blur-[160px] pointer-events-none" />
-        <div className="absolute -bottom-40 -left-40 h-[480px] w-[480px] rounded-full bg-accent/10 blur-[140px] pointer-events-none" />
-        <div className="container-atlas relative pt-24 md:pt-32 pb-24 md:pb-32">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground backdrop-blur">
-              <Sparkles className="h-3 w-3 text-accent" />
-              Business insurance, finally simple
+      {/* HERO — Layered Precision */}
+      <section className="relative overflow-hidden bg-paper">
+        {/* Ambient orange glows */}
+        <div className="pointer-events-none absolute inset-0 opacity-60">
+          <div className="absolute -top-32 -left-24 h-[55%] w-[55%] rounded-full bg-accent/15 blur-[140px] animate-pulse" />
+          <div className="absolute -bottom-32 -right-24 h-[45%] w-[45%] rounded-full bg-accent/10 blur-[120px]" />
+        </div>
+        {/* Masked grid */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.22]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px)",
+            backgroundSize: "64px 64px",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 80% 50% at 50% 50%, #000 60%, transparent 100%)",
+            maskImage:
+              "radial-gradient(ellipse 80% 50% at 50% 50%, #000 60%, transparent 100%)",
+          }}
+        />
+
+        <div className="container-atlas relative pt-24 md:pt-32 pb-20 md:pb-28">
+          <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
+            {/* Pill */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-card px-4 py-1.5 shadow-[0_2px_10px_hsl(var(--accent)/0.08)] transition-transform hover:scale-[1.03]">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+              </span>
+              <span className="text-[11px] font-medium tracking-tight text-ink/80">
+                Business insurance, finally simple
+              </span>
             </div>
-            <h1 className="mt-7 font-display text-5xl md:text-6xl lg:text-[88px] leading-[0.98] font-medium tracking-tight text-balance text-ink">
+
+            {/* Headline */}
+            <h1 className="mt-8 font-display font-bold text-6xl md:text-7xl lg:text-[112px] leading-[0.92] tracking-[-0.035em] text-ink animate-fade-in">
               Cover that
               <br />
-              <span className="text-accent italic">actually fits.</span>
+              <span className="relative inline-block italic font-semibold text-accent tracking-[-0.045em] [text-shadow:0_10px_30px_hsl(var(--accent)/0.18)]">
+                actually fits.
+                <svg
+                  className="absolute -bottom-2 left-0 h-3 w-full text-accent/40"
+                  viewBox="0 0 300 12"
+                  fill="none"
+                  preserveAspectRatio="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M1 10C50 3 150 3 299 10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
             </h1>
-            <p className="mt-7 text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-              Momo finds the right business insurance for your company in minutes. Clearer cover, fairer prices, no jargon.
+
+            {/* Subhead */}
+            <p className="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-muted-foreground">
+              Momo finds the right business insurance for your company in minutes.
+              <br className="hidden md:block" />
+              <span className="font-medium text-ink"> Clearer cover, fairer prices, no jargon.</span>
             </p>
-            <div className="mt-9 flex justify-center">
-              <CTARow primaryLabel="Get my analysis" />
+
+            {/* CTAs */}
+            <div className="mt-10 flex flex-col sm:flex-row gap-4">
+              <Button asChild size="lg" className="group relative h-14 px-8 rounded-2xl font-semibold overflow-hidden bg-ink text-paper hover:bg-ink hover:-translate-y-0.5 hover:shadow-[0_20px_40px_hsl(var(--ink)/0.2)] transition-all">
+                <Link to="/analysis">
+                  <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -translate-x-full skew-x-[-25deg] bg-gradient-to-r from-transparent via-paper/20 to-transparent group-hover:animate-shimmer-sweep" />
+                  <span className="relative flex items-center gap-2">
+                    Get my analysis
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </span>
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="h-14 px-8 rounded-2xl font-semibold bg-card border-border hover:bg-secondary/60 shadow-sm">
+                <Link to="/contact">Book a Call</Link>
+              </Button>
             </div>
-            <div className="mt-10 flex flex-wrap justify-center items-center gap-x-5 gap-y-2 text-xs text-muted-foreground font-mono">
-              <span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" /> Free, no obligation</span>
-              <span className="flex items-center gap-1.5"><Check className="h-3 w-3" /> FCA-aware</span>
-              <span className="flex items-center gap-1.5"><Check className="h-3 w-3" /> Human-reviewed</span>
-              <span className="flex items-center gap-1.5"><Bitcoin className="h-3 w-3" /> Pay in crypto or card</span>
+
+            {/* Trust row */}
+            <div className="mt-16 w-full max-w-3xl border-t border-accent/20 pt-8 flex flex-wrap justify-center items-center gap-x-8 gap-y-3 opacity-75 hover:opacity-100 transition-opacity">
+              <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Free, no obligation
+              </span>
+              <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                <Check className="h-3.5 w-3.5 text-accent" /> FCA-aware
+              </span>
+              <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                <Check className="h-3.5 w-3.5 text-accent" /> Human-reviewed
+              </span>
+              <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                <Bitcoin className="h-3.5 w-3.5" /> Pay in crypto or card
+              </span>
             </div>
           </div>
         </div>
