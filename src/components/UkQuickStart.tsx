@@ -335,17 +335,22 @@ export function UkQuickStart({
   );
 }
 
-function buildPartialInput(co: CompaniesHouseCompany): AnalysisInput {
+function buildPartialInput(
+  co: CompaniesHouseCompany,
+  enriched?: WebsiteEnrichment | null,
+): AnalysisInput {
+  const s = enriched?.signals;
   return {
     companyName: co.companyName,
-    website: co.websiteGuess ?? "",
+    website: enriched?.url ?? co.websiteGuess ?? "",
     contactName: "Not provided",
     email: "unknown@example.com",
     country: "United Kingdom",
-    industry: co.industry,
-    sellsToUS: false,
-    handlesSensitiveData: false,
-    usesAI: false,
+    industry: enriched?.industryHint || co.industry,
+    employeeCount: enriched?.employeeHint || undefined,
+    sellsToUS: s?.sellsToUS ?? false,
+    handlesSensitiveData: s?.handlesSensitiveData ?? false,
+    usesAI: s?.usesAI ?? false,
     hasInsurance: false,
   };
 }
