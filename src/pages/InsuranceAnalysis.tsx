@@ -24,6 +24,7 @@ import { runAutopilot, reviewUploadedDocument, type AutopilotResult } from "@/li
 import { logActivity } from "@/lib/activity";
 import { AutopilotPanel } from "@/components/AutopilotPanel";
 import { UkQuickStart } from "@/components/UkQuickStart";
+import { BackendStatusBanner } from "@/components/BackendStatusBanner";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -158,6 +159,7 @@ export default function InsuranceAnalysis() {
       {/* UK quick start */}
       <section className="pt-12">
         <div className="container-atlas">
+          <BackendStatusBanner className="mb-6" />
           <UkQuickStart
             onRefined={({ input, report: r }) => {
               runFlow(input, r);

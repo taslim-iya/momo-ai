@@ -10,6 +10,7 @@ import { createLeadFromAnalysis, type Lead } from "@/lib/leads";
 import { buildRangedQuote, formatGBP, type RangedQuote } from "@/lib/pricing";
 import { suggestSlots, type Slot } from "@/lib/scheduler";
 import { renderWelcomeWithQuote, renderRenewalReminder } from "@/lib/messages";
+import { BackendStatusBanner } from "@/components/BackendStatusBanner";
 import { cn } from "@/lib/utils";
 
 export default function WatchDemo() {
@@ -57,6 +58,7 @@ export default function WatchDemo() {
       {/* Run it live yourself */}
       <section className="section pt-16">
         <div className="container-atlas">
+          <BackendStatusBanner className="mb-8 max-w-3xl mx-auto" />
           <div className="text-center max-w-2xl mx-auto mb-10">
             <div className="inline-flex flex-wrap items-center justify-center gap-2">
               <div className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
