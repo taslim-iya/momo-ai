@@ -143,23 +143,38 @@ export function UkQuickStart({
 
       {!company && (
         <>
-          <div className="mt-6 grid sm:grid-cols-[1fr_auto] gap-3 sm:items-end">
-            <div className="space-y-1.5">
-              <Label>Companies House number or company name</Label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="e.g. 00502851, Greggs, SC123456"
-                  className="pl-9"
-                  value={number}
-                  onChange={(e) => setNumber(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") lookup(); }}
-                />
+          <div className="mt-6 grid gap-3">
+            <div className="grid sm:grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Companies House number or company name</Label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="e.g. 00502851, Greggs, SC123456"
+                    className="pl-9"
+                    value={number}
+                    onChange={(e) => setNumber(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") lookup(); }}
+                  />
+                </div>
               </div>
-              {error && <p className="text-xs text-destructive flex items-start gap-1 mt-1"><AlertTriangle className="h-3 w-3 mt-0.5 shrink-0" /> {error}</p>}
+              <div className="space-y-1.5">
+                <Label>Company website <span className="text-muted-foreground font-normal">(optional, sharpens the quote)</span></Label>
+                <div className="relative">
+                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="https://acme.co.uk"
+                    className="pl-9"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") lookup(); }}
+                  />
+                </div>
+              </div>
             </div>
-            <Button variant="atlas" onClick={() => lookup()} disabled={loading || !number.trim()} className="h-10">
-              {loading ? "Looking up…" : (<>Look up <ArrowRight className="h-4 w-4" /></>)}
+            {error && <p className="text-xs text-destructive flex items-start gap-1"><AlertTriangle className="h-3 w-3 mt-0.5 shrink-0" /> {error}</p>}
+            <Button variant="atlas" onClick={() => lookup()} disabled={loading || !number.trim()} className="h-10 w-full sm:w-auto sm:justify-self-end">
+              {loading ? "Looking up…" : (<>Look up & price <ArrowRight className="h-4 w-4" /></>)}
             </Button>
           </div>
 
