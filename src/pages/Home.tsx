@@ -45,7 +45,7 @@ export default function Home() {
             <h1 className="mt-8 font-display font-bold text-6xl md:text-7xl lg:text-[112px] leading-[0.92] tracking-[-0.035em] text-ink animate-fade-in">
               Cover that
               <br />
-              <span className="relative inline-block italic font-semibold text-accent tracking-[-0.045em] [text-shadow:0_10px_30px_hsl(var(--accent)/0.18)]">
+              <span className="relative inline-block font-semibold text-accent tracking-[-0.045em] [text-shadow:0_10px_30px_hsl(var(--accent)/0.18)]">
                 actually fits.
                 <svg
                   className="absolute -bottom-2 left-0 h-3 w-full text-accent/40"
@@ -111,7 +111,7 @@ export default function Home() {
         <div className="container-atlas">
           <SectionHeader
             eyebrow="Why Momo"
-            title={<>Insurance that <span className="text-accent italic">works for you.</span></>}
+            title={<>Insurance that <span className="text-accent">works for you.</span></>}
             description="Built for modern businesses who want clarity, speed and cover that genuinely matches their risk."
           />
           <div className="mt-16 grid md:grid-cols-3 gap-5">
@@ -144,7 +144,7 @@ export default function Home() {
                 Live picture
               </div>
               <h2 className="mt-5 font-display text-4xl md:text-5xl text-ink leading-[1.02] tracking-tight text-balance">
-                One view of your <span className="text-accent italic">whole insurance stack.</span>
+                One view of your <span className="text-accent">whole insurance stack.</span>
               </h2>
               <p className="mt-5 text-lg text-muted-foreground max-w-md">
                 Cover, quotes, renewals and gaps in a single place. No more scattered PDFs or chasing brokers for updates.
@@ -168,7 +168,7 @@ export default function Home() {
                   Pay your way
                 </div>
                 <h2 className="mt-5 font-display text-4xl md:text-5xl text-ink leading-[1.02] tracking-tight">
-                  Card, bank transfer or <span className="text-accent italic">crypto.</span>
+                  Card, bank transfer or <span className="text-accent">crypto.</span>
                 </h2>
                 <p className="mt-5 text-lg text-muted-foreground max-w-xl">
                   Settle your premium in pounds, dollars or euros, or pay in Bitcoin, Ethereum or USDC. Same cover, your choice of rails.
@@ -249,7 +249,7 @@ export default function Home() {
         <div className="container-atlas">
           <SectionHeader
             eyebrow="Who we help"
-            title={<>Built for <span className="text-accent italic">modern businesses.</span></>}
+            title={<>Built for <span className="text-accent">modern businesses.</span></>}
             description="From early-stage startups to established firms - if your business is moving fast, your insurance should too."
           />
           <div className="mt-14 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -277,7 +277,7 @@ export default function Home() {
             <div className="relative flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
               <div>
                 <h2 className="font-display text-4xl md:text-5xl text-ink leading-[1.02] tracking-tight max-w-2xl">
-                  Get the right cover. <span className="text-accent italic">In minutes.</span>
+                  Get the right cover. <span className="text-accent">In minutes.</span>
                 </h2>
                 <p className="mt-4 text-muted-foreground max-w-xl">
                   Free analysis. No credit card. No sales call required.
