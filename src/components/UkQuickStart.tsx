@@ -38,9 +38,11 @@ export function UkQuickStart({
   onRefined: (s: RefinedSubmission) => void;
 }) {
   const [number, setNumber] = useState("");
+  const [website, setWebsite] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [company, setCompany] = useState<CompaniesHouseCompany | null>(null);
+  const [enrichment, setEnrichment] = useState<WebsiteEnrichment | null>(null);
   const [quote, setQuote] = useState<RangedQuote | null>(null);
   const [refineOpen, setRefineOpen] = useState(false);
 
