@@ -226,6 +226,25 @@ export function UkQuickStart({
                     </span>
                   ))}
                 </div>
+                {enrichment?.reachable && (
+                  <div className="mt-3 rounded-md border border-accent/30 bg-accent/[0.04] p-3">
+                    <div className="text-[10px] uppercase tracking-wider text-accent flex items-center gap-1.5">
+                      <Sparkles className="h-3 w-3" /> From your website
+                    </div>
+                    {enrichment.description && (
+                      <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{enrichment.description}</p>
+                    )}
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {enrichment.industryHint && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-ink">Industry: {enrichment.industryHint}</span>
+                      )}
+                      {enrichment.signals?.usesAI && <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-ink">Uses AI</span>}
+                      {enrichment.signals?.handlesSensitiveData && <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-ink">Sensitive data</span>}
+                      {enrichment.signals?.sellsToUS && <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-ink">US exposure</span>}
+                      {enrichment.employeeHint && <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-ink">~{enrichment.employeeHint} staff</span>}
+                    </div>
+                  </div>
+                )}
               </div>
               <Button variant="ghost" size="sm" onClick={reset}>Try another</Button>
             </div>
