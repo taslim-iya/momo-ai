@@ -75,7 +75,7 @@ export default function Home() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
               <Button asChild size="lg" className="group relative h-14 px-8 rounded-2xl font-semibold overflow-hidden bg-ink text-paper hover:bg-ink hover:-translate-y-0.5 hover:shadow-[0_20px_40px_hsl(var(--ink)/0.2)] transition-all">
                 <Link to="/analysis">
-                  <span className="pointer-events-none absolute inset-0 -translate-x-full skew-x-[-25deg] bg-gradient-to-r from-transparent via-paper/15 to-transparent group-hover:animate-[shimmer_1.5s_ease-in-out_infinite] w-1/3" />
+                  <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -translate-x-full skew-x-[-25deg] bg-gradient-to-r from-transparent via-paper/20 to-transparent group-hover:animate-shimmer-sweep" />
                   <span className="relative flex items-center gap-2">
                     Get my analysis
                     <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
