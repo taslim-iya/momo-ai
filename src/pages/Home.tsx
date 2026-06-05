@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Sparkles, Shield, Zap, Scale, Check, Bitcoin, Wallet, CreditCard } from "lucide-react";
+import { ArrowUpRight, Shield, Zap, Scale, Check, Bitcoin, Wallet, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CTARow, SectionHeader } from "@/components/atlas/Bits";
 import { HeroDashboard } from "@/components/atlas/HeroDashboard";
@@ -7,101 +7,52 @@ import { HeroDashboard } from "@/components/atlas/HeroDashboard";
 export default function Home() {
   return (
     <>
-      {/* HERO — Layered Precision */}
-      <section className="relative overflow-hidden bg-paper">
-        {/* Ambient orange glows */}
-        <div className="pointer-events-none absolute inset-0 opacity-60">
-          <div className="absolute -top-32 -left-24 h-[55%] w-[55%] rounded-full bg-accent/15 blur-[140px] animate-pulse" />
-          <div className="absolute -bottom-32 -right-24 h-[45%] w-[45%] rounded-full bg-accent/10 blur-[120px]" />
-        </div>
-        {/* Masked grid */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.22]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-            WebkitMaskImage:
-              "radial-gradient(ellipse 80% 50% at 50% 50%, #000 60%, transparent 100%)",
-            maskImage:
-              "radial-gradient(ellipse 80% 50% at 50% 50%, #000 60%, transparent 100%)",
-          }}
-        />
+      {/* HERO — editorial, restrained */}
+      <section className="relative overflow-hidden bg-paper border-b border-border/60">
+        <div className="container-atlas relative pt-20 md:pt-28 pb-16 md:pb-24">
+          {/* Eyebrow row */}
+          <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="h-px w-8 bg-ink/30" />
+            <span>Momo — Business Insurance</span>
+            <span className="hidden md:inline text-muted-foreground/60">/ 2026</span>
+          </div>
 
-        <div className="container-atlas relative pt-24 md:pt-32 pb-20 md:pb-28">
-          <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
-            {/* Pill */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-card px-4 py-1.5 shadow-[0_2px_10px_hsl(var(--accent)/0.08)] transition-transform hover:scale-[1.03]">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-              </span>
-              <span className="text-[11px] font-medium tracking-tight text-ink/80">
-                Business insurance, finally simple
-              </span>
-            </div>
-
+          <div className="mt-10 grid lg:grid-cols-12 gap-10 lg:gap-16 items-end">
             {/* Headline */}
-            <h1 className="mt-8 font-display font-bold text-6xl md:text-7xl lg:text-[112px] leading-[0.92] tracking-[-0.035em] text-ink animate-fade-in">
-              Cover that
-              <br />
-              <span className="relative inline-block italic font-semibold text-accent tracking-[-0.045em] [text-shadow:0_10px_30px_hsl(var(--accent)/0.18)]">
-                actually fits.
-                <svg
-                  className="absolute -bottom-2 left-0 h-3 w-full text-accent/40"
-                  viewBox="0 0 300 12"
-                  fill="none"
-                  preserveAspectRatio="none"
-                  aria-hidden
-                >
-                  <path
-                    d="M1 10C50 3 150 3 299 10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </span>
-            </h1>
+            <div className="lg:col-span-8">
+              <h1 className="font-display font-medium text-[44px] md:text-6xl lg:text-[80px] leading-[0.98] tracking-[-0.03em] text-ink">
+                Cover that actually
+                <br />
+                fits your business<span className="text-accent">.</span>
+              </h1>
+            </div>
 
-            {/* Subhead */}
-            <p className="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-muted-foreground">
-              Momo finds the right business insurance for your company in minutes.
-              <br className="hidden md:block" />
-              <span className="font-medium text-ink"> Clearer cover, fairer prices, no jargon.</span>
-            </p>
-
-            {/* CTAs */}
-            <div className="mt-10 flex flex-col sm:flex-row gap-4">
-              <Button asChild size="lg" className="group relative h-14 px-8 rounded-2xl font-semibold overflow-hidden bg-ink text-paper hover:bg-ink hover:-translate-y-0.5 hover:shadow-[0_20px_40px_hsl(var(--ink)/0.2)] transition-all">
-                <Link to="/analysis">
-                  <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -translate-x-full skew-x-[-25deg] bg-gradient-to-r from-transparent via-paper/20 to-transparent group-hover:animate-shimmer-sweep" />
-                  <span className="relative flex items-center gap-2">
+            {/* Sub + CTAs */}
+            <div className="lg:col-span-4 lg:pb-3">
+              <p className="text-base md:text-[17px] leading-relaxed text-muted-foreground max-w-md">
+                Momo analyses your company, benchmarks the market and arranges the
+                right policies — clearer cover, fairer prices, no jargon.
+              </p>
+              <div className="mt-7 flex flex-col sm:flex-row gap-3">
+                <Button asChild size="lg" className="h-12 px-6 rounded-full font-medium bg-ink text-paper hover:bg-ink/90">
+                  <Link to="/analysis" className="inline-flex items-center gap-2">
                     Get my analysis
-                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </span>
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="h-14 px-8 rounded-2xl font-semibold bg-card border-border hover:bg-secondary/60 shadow-sm">
-                <Link to="/contact">Book a Call</Link>
-              </Button>
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost" size="lg" className="h-12 px-5 rounded-full font-medium text-ink hover:bg-secondary/60">
+                  <Link to="/contact">Book a call</Link>
+                </Button>
+              </div>
             </div>
+          </div>
 
-            {/* Trust row */}
-            <div className="mt-16 w-full max-w-3xl border-t border-accent/20 pt-8 flex flex-wrap justify-center items-center gap-x-8 gap-y-3 opacity-75 hover:opacity-100 transition-opacity">
-              <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Free, no obligation
-              </span>
-              <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                <Check className="h-3.5 w-3.5 text-accent" /> FCA-aware
-              </span>
-              <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                <Check className="h-3.5 w-3.5 text-accent" /> Human-reviewed
-              </span>
-              <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                <Bitcoin className="h-3.5 w-3.5" /> Pay in crypto or card
-              </span>
-            </div>
+          {/* Meta strip */}
+          <div className="mt-16 md:mt-24 border-t border-border pt-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+            <MetaItem k="01" label="Free analysis" sub="No card, no obligation" />
+            <MetaItem k="02" label="FCA-aware" sub="UK regulated brokers" />
+            <MetaItem k="03" label="Human reviewed" sub="Every quote, every time" />
+            <MetaItem k="04" label="Card or crypto" sub="GBP · USD · EUR · BTC" />
           </div>
         </div>
       </section>
@@ -111,21 +62,24 @@ export default function Home() {
         <div className="container-atlas">
           <SectionHeader
             eyebrow="Why Momo"
-            title={<>Insurance that <span className="text-accent italic">works for you.</span></>}
+            title={<>Insurance that works for you.</>}
             description="Built for modern businesses who want clarity, speed and cover that genuinely matches their risk."
           />
-          <div className="mt-16 grid md:grid-cols-3 gap-5">
+          <div className="mt-14 grid md:grid-cols-3 gap-px bg-border rounded-2xl overflow-hidden border border-border">
             <ValueCard
+              num="01"
               icon={Zap}
               title="Minutes, not weeks"
-              body="Tell us about your business once. Get a clear picture of what cover you need and what it should cost - fast."
+              body="Tell us about your business once. Get a clear picture of what cover you need and what it should cost — fast."
             />
             <ValueCard
+              num="02"
               icon={Shield}
               title="Cover that fits"
               body="No generic packages. We match your actual exposures to the right policies, and flag the gaps most brokers miss."
             />
             <ValueCard
+              num="03"
               icon={Scale}
               title="Fair, transparent pricing"
               body="See what you're paying for and why. We negotiate with insurers so you don't pay for cover you don't need."
@@ -144,7 +98,7 @@ export default function Home() {
                 Live picture
               </div>
               <h2 className="mt-5 font-display text-4xl md:text-5xl text-ink leading-[1.02] tracking-tight text-balance">
-                One view of your <span className="text-accent italic">whole insurance stack.</span>
+                One view of your whole insurance stack.
               </h2>
               <p className="mt-5 text-lg text-muted-foreground max-w-md">
                 Cover, quotes, renewals and gaps in a single place. No more scattered PDFs or chasing brokers for updates.
@@ -160,7 +114,7 @@ export default function Home() {
       {/* PAYMENTS */}
       <section className="section pt-0">
         <div className="container-atlas">
-          <div className="rounded-3xl border border-border bg-card p-10 md:p-14">
+          <div className="rounded-2xl border border-border bg-card p-10 md:p-14">
             <div className="grid lg:grid-cols-12 gap-10 items-center">
               <div className="lg:col-span-7">
                 <div className="eyebrow text-muted-foreground">
@@ -168,7 +122,7 @@ export default function Home() {
                   Pay your way
                 </div>
                 <h2 className="mt-5 font-display text-4xl md:text-5xl text-ink leading-[1.02] tracking-tight">
-                  Card, bank transfer or <span className="text-accent italic">crypto.</span>
+                  Card, bank transfer or crypto.
                 </h2>
                 <p className="mt-5 text-lg text-muted-foreground max-w-xl">
                   Settle your premium in pounds, dollars or euros, or pay in Bitcoin, Ethereum or USDC. Same cover, your choice of rails.
@@ -187,10 +141,8 @@ export default function Home() {
       {/* HOW SIMPLE */}
       <section className="section pt-0">
         <div className="container-atlas">
-          <div className="rounded-3xl border border-border bg-gradient-paper p-10 md:p-16 relative overflow-hidden">
-            <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-accent/15 blur-3xl pointer-events-none" />
-            <div className="absolute -left-24 -bottom-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
-            <div className="relative grid lg:grid-cols-12 gap-12 items-center">
+          <div className="rounded-2xl border border-border bg-card p-10 md:p-16">
+            <div className="grid lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-6">
                 <div className="eyebrow text-muted-foreground">
                   <span className="h-px w-6 bg-muted-foreground/40" />
@@ -211,7 +163,7 @@ export default function Home() {
                     "What to ask your current broker",
                   ].map((p) => (
                     <li key={p} className="flex items-center gap-3 text-ink">
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent/15 text-accent">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent/10 text-accent">
                         <Check className="h-3 w-3" strokeWidth={3} />
                       </span>
                       <span className="text-sm md:text-base">{p}</span>
@@ -225,10 +177,10 @@ export default function Home() {
                 </div>
               </div>
               <div className="lg:col-span-6">
-                <div className="rounded-2xl border border-border bg-card p-6 shadow-elev">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground font-mono">
-                    <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-                    your-company.com
+                <div className="rounded-xl border border-border bg-background p-6">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
+                    <span>your-company.com</span>
+                    <span className="text-accent">Live</span>
                   </div>
                   <div className="mt-5 space-y-3 text-sm">
                     <Sample label="Industry" value="SaaS / Fintech" />
@@ -245,12 +197,12 @@ export default function Home() {
       </section>
 
       {/* WHO WE HELP */}
-      <section className="section bg-secondary/40">
+      <section className="section bg-secondary/40 border-y border-border">
         <div className="container-atlas">
           <SectionHeader
             eyebrow="Who we help"
-            title={<>Built for <span className="text-accent italic">modern businesses.</span></>}
-            description="From early-stage startups to established firms - if your business is moving fast, your insurance should too."
+            title={<>Built for modern businesses.</>}
+            description="From early-stage startups to established firms — if your business is moving fast, your insurance should too."
           />
           <div className="mt-14 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
@@ -259,8 +211,8 @@ export default function Home() {
               { tag: "AI Companies", body: "Specialist cover for AI products and model risk." },
               { tag: "Professional Services", body: "PI, management liability and cyber done right." },
             ].map((s) => (
-              <div key={s.tag} className="group rounded-2xl border border-border bg-card p-6 hover:border-accent/50 hover:shadow-elev transition-all">
-                <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-accent">{s.tag}</div>
+              <div key={s.tag} className="group rounded-xl border border-border bg-card p-6 hover:border-ink/30 transition-colors">
+                <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-accent">{s.tag}</div>
                 <p className="mt-4 text-ink leading-relaxed">{s.body}</p>
               </div>
             ))}
@@ -269,15 +221,13 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="pb-24 pt-4">
+      <section className="py-24">
         <div className="container-atlas">
-          <div className="rounded-3xl border border-border bg-gradient-paper p-10 md:p-16 relative overflow-hidden">
-            <div className="absolute inset-0 bg-grid-light opacity-30" />
-            <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-accent/15 blur-3xl pointer-events-none" />
-            <div className="relative flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+          <div className="rounded-2xl border border-border bg-card p-10 md:p-16">
+            <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
               <div>
                 <h2 className="font-display text-4xl md:text-5xl text-ink leading-[1.02] tracking-tight max-w-2xl">
-                  Get the right cover. <span className="text-accent italic">In minutes.</span>
+                  Get the right cover. In minutes.
                 </h2>
                 <p className="mt-4 text-muted-foreground max-w-xl">
                   Free analysis. No credit card. No sales call required.
@@ -292,14 +242,29 @@ export default function Home() {
   );
 }
 
-function ValueCard({ icon: Icon, title, body }: { icon: React.ComponentType<{className?:string}>; title: string; body: string }) {
+function MetaItem({ k, label, sub }: { k: string; label: string; sub: string }) {
   return (
-    <div className="group relative rounded-2xl border border-border bg-card p-8 shadow-card hover:shadow-elev hover:border-accent/40 hover:-translate-y-0.5 transition-all">
-      <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent">
-        <Icon className="h-5 w-5" />
+    <div className="flex gap-3">
+      <span className="font-mono text-[11px] text-muted-foreground pt-0.5">{k}</span>
+      <div>
+        <div className="text-ink font-medium">{label}</div>
+        <div className="text-muted-foreground text-[13px]">{sub}</div>
       </div>
-      <h3 className="mt-6 font-display text-2xl text-ink tracking-tight">{title}</h3>
-      <p className="mt-3 text-muted-foreground leading-relaxed">{body}</p>
+    </div>
+  );
+}
+
+function ValueCard({ num, icon: Icon, title, body }: { num: string; icon: React.ComponentType<{className?:string}>; title: string; body: string }) {
+  return (
+    <div className="relative bg-card p-8 md:p-10 hover:bg-background transition-colors">
+      <div className="flex items-start justify-between">
+        <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-ink/5 text-ink">
+          <Icon className="h-5 w-5" />
+        </div>
+        <span className="font-mono text-[11px] text-muted-foreground">{num}</span>
+      </div>
+      <h3 className="mt-8 font-display text-xl md:text-2xl text-ink tracking-tight">{title}</h3>
+      <p className="mt-3 text-muted-foreground leading-relaxed text-[15px]">{body}</p>
     </div>
   );
 }
@@ -315,7 +280,7 @@ function Sample({ label, value, accent }: { label: string; value: string; accent
 
 function PayTile({ icon: Icon, label, sub, accent }: { icon: React.ComponentType<{className?:string}>; label: string; sub: string; accent?: boolean }) {
   return (
-    <div className={`rounded-xl border p-4 flex flex-col gap-2 ${accent ? "border-accent/50 bg-accent/5" : "border-border bg-background"}`}>
+    <div className={`rounded-xl border p-4 flex flex-col gap-2 ${accent ? "border-accent/40 bg-accent/5" : "border-border bg-background"}`}>
       <Icon className={`h-5 w-5 ${accent ? "text-accent" : "text-ink"}`} />
       <div className="font-display font-semibold text-ink text-sm">{label}</div>
       <div className="text-[11px] text-muted-foreground font-mono leading-tight">{sub}</div>
