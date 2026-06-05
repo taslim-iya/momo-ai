@@ -177,20 +177,20 @@ export interface Quote {
 }
 
 const REVENUE_TIER: Record<string, number> = {
-  "< £500k": 0.5,
-  "£500k–£2m": 1,
-  "£2m–£10m": 2.5,
-  "£10m–£50m": 6,
-  "£50m–£250m": 14,
-  "> £250m": 30,
+  "< £500k": 0.75,
+  "£500k–£2m": 1.4,
+  "£2m–£10m": 3.2,
+  "£10m–£50m": 8,
+  "£50m–£250m": 18,
+  "> £250m": 38,
 };
 
 const EMPLOYEE_TIER: Record<string, number> = {
-  "1-10": 1,
-  "11-50": 2.4,
-  "51-200": 5,
-  "201-500": 10,
-  "500+": 22,
+  "1-10": 1.2,
+  "11-50": 3.2,
+  "51-200": 7,
+  "201-500": 14,
+  "500+": 30,
 };
 
 const INDUSTRY_MULT: Record<string, number> = {
