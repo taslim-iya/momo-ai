@@ -15,6 +15,7 @@ import {
   lookupCompaniesHouse,
   type CompaniesHouseCompany,
 } from "@/lib/companiesHouse";
+import { enrichFromWebsite, type WebsiteEnrichment } from "@/lib/websiteEnrich";
 import { buildRangedQuote, formatGBP, type RangedQuote } from "@/lib/pricing";
 import type { AnalysisInput, Report } from "@/lib/analyzer";
 import { generateReport } from "@/lib/analyzer";
@@ -37,9 +38,11 @@ export function UkQuickStart({
   onRefined: (s: RefinedSubmission) => void;
 }) {
   const [number, setNumber] = useState("");
+  const [website, setWebsite] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [company, setCompany] = useState<CompaniesHouseCompany | null>(null);
+  const [enrichment, setEnrichment] = useState<WebsiteEnrichment | null>(null);
   const [quote, setQuote] = useState<RangedQuote | null>(null);
   const [refineOpen, setRefineOpen] = useState(false);
 
@@ -56,7 +59,9 @@ export function UkQuickStart({
 
   const reset = () => {
     setNumber("");
+    setWebsite("");
     setCompany(null);
+    setEnrichment(null);
     setQuote(null);
     setRefineOpen(false);
     setError(null);
@@ -72,17 +77,21 @@ export function UkQuickStart({
     if (override) setNumber(override);
     setLoading(true);
     try {
-      const co = await lookupCompaniesHouse(query);
+      const [co, enriched] = await Promise.all([
+        lookupCompaniesHouse(query),
+        website.trim() ? enrichFromWebsite(website) : Promise.resolve(null),
+      ]);
       if (!co) {
         setError("Couldn't find that company. Try one of the demo numbers below, a valid 8-character CH number (e.g. 12345678 / SC123456), or use the full form.");
         return;
       }
       setCompany(co);
+      setEnrichment(enriched);
       // Build a partial lead for indicative pricing - confidence "low".
-      const partialInput = buildPartialInput(co);
+      const partialInput = buildPartialInput(co, enriched);
       const partialReport = generateReport(partialInput);
       const partialLead = createLeadFromAnalysis(partialInput, partialReport);
-      setQuote(buildRangedQuote(partialLead, "low"));
+      setQuote(buildRangedQuote(partialLead, enriched ? "medium" : "low"));
     } catch {
       setError("Lookup failed. Please try again or use the full form below.");
     } finally {
@@ -96,9 +105,10 @@ export function UkQuickStart({
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast.error("Add a valid work email."); return; }
 
     const input: AnalysisInput = {
-      ...buildPartialInput(company),
+      ...buildPartialInput(company, enrichment),
       contactName: contactName.trim(),
       email: email.trim(),
+      website: website.trim() || enrichment?.url || company.websiteGuess || "",
       revenueRange: revenue || undefined,
       employeeCount: employees || undefined,
       sellsToUS,
@@ -133,23 +143,38 @@ export function UkQuickStart({
 
       {!company && (
         <>
-          <div className="mt-6 grid sm:grid-cols-[1fr_auto] gap-3 sm:items-end">
-            <div className="space-y-1.5">
-              <Label>Companies House number or company name</Label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="e.g. 00502851, Greggs, SC123456"
-                  className="pl-9"
-                  value={number}
-                  onChange={(e) => setNumber(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") lookup(); }}
-                />
+          <div className="mt-6 grid gap-3">
+            <div className="grid sm:grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Companies House number or company name</Label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="e.g. 00502851, Greggs, SC123456"
+                    className="pl-9"
+                    value={number}
+                    onChange={(e) => setNumber(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") lookup(); }}
+                  />
+                </div>
               </div>
-              {error && <p className="text-xs text-destructive flex items-start gap-1 mt-1"><AlertTriangle className="h-3 w-3 mt-0.5 shrink-0" /> {error}</p>}
+              <div className="space-y-1.5">
+                <Label>Company website <span className="text-muted-foreground font-normal">(optional, sharpens the quote)</span></Label>
+                <div className="relative">
+                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="https://acme.co.uk"
+                    className="pl-9"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") lookup(); }}
+                  />
+                </div>
+              </div>
             </div>
-            <Button variant="atlas" onClick={() => lookup()} disabled={loading || !number.trim()} className="h-10">
-              {loading ? "Looking up…" : (<>Look up <ArrowRight className="h-4 w-4" /></>)}
+            {error && <p className="text-xs text-destructive flex items-start gap-1"><AlertTriangle className="h-3 w-3 mt-0.5 shrink-0" /> {error}</p>}
+            <Button variant="atlas" onClick={() => lookup()} disabled={loading || !number.trim()} className="h-10 w-full sm:w-auto sm:justify-self-end">
+              {loading ? "Looking up…" : (<>Look up & price <ArrowRight className="h-4 w-4" /></>)}
             </Button>
           </div>
 
@@ -201,6 +226,25 @@ export function UkQuickStart({
                     </span>
                   ))}
                 </div>
+                {enrichment?.reachable && (
+                  <div className="mt-3 rounded-md border border-accent/30 bg-accent/[0.04] p-3">
+                    <div className="text-[10px] uppercase tracking-wider text-accent flex items-center gap-1.5">
+                      <Sparkles className="h-3 w-3" /> From your website
+                    </div>
+                    {enrichment.description && (
+                      <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{enrichment.description}</p>
+                    )}
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {enrichment.industryHint && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-ink">Industry: {enrichment.industryHint}</span>
+                      )}
+                      {enrichment.signals?.usesAI && <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-ink">Uses AI</span>}
+                      {enrichment.signals?.handlesSensitiveData && <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-ink">Sensitive data</span>}
+                      {enrichment.signals?.sellsToUS && <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-ink">US exposure</span>}
+                      {enrichment.employeeHint && <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-ink">~{enrichment.employeeHint} staff</span>}
+                    </div>
+                  </div>
+                )}
               </div>
               <Button variant="ghost" size="sm" onClick={reset}>Try another</Button>
             </div>
@@ -216,7 +260,7 @@ export function UkQuickStart({
                   <span className="text-sm text-muted-foreground"> / year</span>
                 </div>
                 <div className="text-[11px] text-muted-foreground mt-1">
-                  Confidence: low · based only on Companies House data. Tightens with more info.
+                  Confidence: {enrichment?.reachable ? "medium" : "low"} · {enrichment?.reachable ? "Companies House + your website" : "based only on Companies House data"}. Tightens with more info.
                 </div>
               </div>
               <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
@@ -310,17 +354,22 @@ export function UkQuickStart({
   );
 }
 
-function buildPartialInput(co: CompaniesHouseCompany): AnalysisInput {
+function buildPartialInput(
+  co: CompaniesHouseCompany,
+  enriched?: WebsiteEnrichment | null,
+): AnalysisInput {
+  const s = enriched?.signals;
   return {
     companyName: co.companyName,
-    website: co.websiteGuess ?? "",
+    website: enriched?.url ?? co.websiteGuess ?? "",
     contactName: "Not provided",
     email: "unknown@example.com",
     country: "United Kingdom",
-    industry: co.industry,
-    sellsToUS: false,
-    handlesSensitiveData: false,
-    usesAI: false,
+    industry: enriched?.industryHint || co.industry,
+    employeeCount: enriched?.employeeHint || undefined,
+    sellsToUS: s?.sellsToUS ?? false,
+    handlesSensitiveData: s?.handlesSensitiveData ?? false,
+    usesAI: s?.usesAI ?? false,
     hasInsurance: false,
   };
 }

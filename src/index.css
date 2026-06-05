@@ -57,8 +57,8 @@
     --shadow-glow: 0 0 0 1px hsl(25 88% 58% / 0.25), 0 16px 48px -12px hsl(25 88% 58% / 0.5);
 
     /* Type */
-    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-    --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: 'Space Grotesk', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
     --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -101,8 +101,16 @@
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
+    font-optical-sizing: auto;
+    letter-spacing: -0.005em;
   }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.025em; font-weight: 500; }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.028em;
+    font-weight: 600;
+    line-height: 1.08;
+  }
+  h1 { letter-spacing: -0.035em; }
   .font-display { font-family: var(--font-display); }
   .font-mono { font-family: var(--font-mono); }
 
