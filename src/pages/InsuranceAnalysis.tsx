@@ -80,7 +80,21 @@ export default function InsuranceAnalysis() {
     },
   });
 
+  // Whether localStorage holds a previous analysis. Surfaced as an opt-in
+  // 'Restore my last analysis' banner at the top of the form. Restore is
+  // deliberately NOT automatic — auto-restoring made every page visit show
+  // the same prefilled company, so re-running the form returned identical
+  // results and looked like a stuck mock.
+  const [hasPrevious, setHasPrevious] = useState(false);
   useEffect(() => {
+    try {
+      setHasPrevious(!!localStorage.getItem(LAST_REPORT_KEY));
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const restorePrevious = () => {
     try {
       const r = localStorage.getItem(LAST_REPORT_KEY);
       const v = localStorage.getItem(LAST_VALUES_KEY);
@@ -91,11 +105,25 @@ export default function InsuranceAnalysis() {
       }
       if (v) form.reset(JSON.parse(v));
       if (a) setAutopilot(JSON.parse(a));
+      setHasPrevious(false);
+      setTimeout(() => {
+        document.getElementById("report")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
     } catch {
-      // ignore corrupted storage
+      // ignore
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
+
+  const discardPrevious = () => {
+    try {
+      localStorage.removeItem(LAST_REPORT_KEY);
+      localStorage.removeItem(LAST_VALUES_KEY);
+      localStorage.removeItem(LAST_AUTOPILOT_KEY);
+    } catch {
+      // ignore
+    }
+    setHasPrevious(false);
+  };
 
   const runFlow = (input: AnalysisInput, r: Report) => {
     setReport(r);
@@ -126,7 +154,13 @@ export default function InsuranceAnalysis() {
     setReport(null);
     setAutopilot(null);
     setRestored(false);
-    form.reset();
+    setHasPrevious(false);
+    form.reset({
+      sellsToUS: false,
+      handlesSensitiveData: false,
+      usesAI: false,
+      hasInsurance: false,
+    });
     try {
       localStorage.removeItem(LAST_REPORT_KEY);
       localStorage.removeItem(LAST_VALUES_KEY);
@@ -179,6 +213,15 @@ export default function InsuranceAnalysis() {
       <section id="full-form" className="section">
         <div className="container-atlas grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-8">
+            {hasPrevious && !report && (
+              <div className="mb-6 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3 text-sm text-ink flex items-center justify-between gap-3 flex-wrap">
+                <span>You have a previous analysis saved. Restore it, or fill the form for a new one.</span>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={restorePrevious}>Restore</Button>
+                  <Button variant="ghost" size="sm" onClick={discardPrevious}>Discard</Button>
+                </div>
+              </div>
+            )}
             <form onSubmit={form.handleSubmit(onSubmit)} className="rounded-2xl border border-border bg-card p-8 md:p-10 shadow-card">
               <FieldGroup title="About your company" icon={Building2}>
                 <Field label="Company name" error={form.formState.errors.companyName?.message}>
