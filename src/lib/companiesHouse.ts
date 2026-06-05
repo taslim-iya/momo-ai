@@ -388,8 +388,6 @@ function seededRandom(seed: string): () => number {
 
 // --- Backend wiring ---
 
-import { supabase } from "@/integrations/supabase/client";
-
 const BACKEND_URL: string | undefined = (() => {
   // Vite exposes env vars prefixed with VITE_ via import.meta.env.
   const raw = (import.meta as unknown as { env?: Record<string, string> }).env
@@ -406,16 +404,6 @@ export function backendMode(): "live" | "mock" {
 async function lookupViaCloudFunction(
   raw: string,
 ): Promise<CompaniesHouseCompany | null> {
-  try {
-    const { data, error } = await supabase.functions.invoke(
-      "companies-house-lookup",
-      { body: null, method: "GET" } as never,
-    );
-    // supabase.functions.invoke doesn't support query string nicely on GET
-    // across versions, so call fetch directly instead.
-    void data; void error;
-  } catch { /* fallthrough */ }
-
   try {
     const SUPABASE_URL = (import.meta as unknown as { env?: Record<string, string> })
       .env?.VITE_SUPABASE_URL;

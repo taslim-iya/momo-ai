@@ -1,5 +1,3 @@
-import { supabase } from "@/integrations/supabase/client";
-
 export interface WebsiteEnrichment {
   url: string;
   reachable: boolean;
@@ -29,6 +27,3 @@ export async function enrichFromWebsite(rawUrl: string): Promise<WebsiteEnrichme
     return null;
   }
 }
-
-// touch import to avoid unused warning when client is needed elsewhere later
-void supabase;
