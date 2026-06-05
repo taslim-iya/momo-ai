@@ -1,13 +1,12 @@
-// Pings /api/health to find out whether the serverless layer is wired up
-// and whether the Companies House key is in place. Used by the customer
-// pages to render a status pill so a 'why am I seeing mock data?' question
-// has an immediate answer.
+// Pings the Lovable Cloud edge function `companies-house-lookup` to verify
+// the Companies House integration is wired up. Used by the customer pages
+// to render a status pill.
 
 export type BackendHealthStatus =
   | "checking"
-  | "live"           // function reachable AND CH key present
-  | "function-only"  // function reachable but no CH key configured
-  | "not-deployed";  // host doesn't run serverless functions (SPA fallback / 404 etc.)
+  | "live"           // edge function reachable AND CH key present
+  | "function-only"  // edge function reachable but no CH key configured
+  | "not-deployed";  // edge function unreachable
 
 export interface BackendHealthReport {
   status: BackendHealthStatus;
@@ -15,30 +14,44 @@ export interface BackendHealthReport {
   checkedAt?: string;
 }
 
-const HEALTH_PATH = "/api/health";
-
 export async function fetchBackendHealth(): Promise<BackendHealthReport> {
   try {
-    const resp = await fetch(HEALTH_PATH, {
-      headers: { accept: "application/json" },
-      cache: "no-store",
-    });
+    const SUPABASE_URL = (import.meta as unknown as { env?: Record<string, string> })
+      .env?.VITE_SUPABASE_URL;
+    const ANON_KEY = (import.meta as unknown as { env?: Record<string, string> })
+      .env?.VITE_SUPABASE_PUBLISHABLE_KEY;
+    if (!SUPABASE_URL || !ANON_KEY) {
+      return { status: "not-deployed", detail: "Lovable Cloud is not configured." };
+    }
+    // Probe with a known-good company number (Greggs PLC).
+    const resp = await fetch(
+      `${SUPABASE_URL}/functions/v1/companies-house-lookup?q=00502851`,
+      {
+        headers: {
+          apikey: ANON_KEY,
+          Authorization: `Bearer ${ANON_KEY}`,
+          accept: "application/json",
+        },
+        cache: "no-store",
+      },
+    );
+    if (resp.status === 500) {
+      const body = await resp.json().catch(() => ({}));
+      if (typeof body?.error === "string" && body.error.includes("COMPANIES_HOUSE_API_KEY")) {
+        return {
+          status: "function-only",
+          detail: "Edge function deployed, but COMPANIES_HOUSE_API_KEY is not set.",
+          checkedAt: new Date().toISOString(),
+        };
+      }
+      return { status: "not-deployed", detail: `Edge function returned HTTP 500.` };
+    }
     if (!resp.ok) {
-      return { status: "not-deployed", detail: `health endpoint returned HTTP ${resp.status}` };
+      return { status: "not-deployed", detail: `Edge function returned HTTP ${resp.status}` };
     }
-    // If the SPA's catch-all served index.html (200 OK but HTML body), JSON
-    // parsing will throw and we report not-deployed. That's the most common
-    // failure mode for hosts that don't run /api/* as functions.
-    const data = (await resp.json()) as { hasKey?: boolean; status?: string; runtime?: string };
-    if (data.status !== "ok") {
-      return { status: "not-deployed", detail: "health endpoint returned non-ok payload" };
-    }
-    if (!data.hasKey) {
-      return {
-        status: "function-only",
-        detail: "Function deployed, but COMPANIES_HOUSE_API_KEY is not set.",
-        checkedAt: new Date().toISOString(),
-      };
+    const data = await resp.json();
+    if (!data?.company_number) {
+      return { status: "not-deployed", detail: "Unexpected response from edge function." };
     }
     return { status: "live", checkedAt: new Date().toISOString() };
   } catch (err) {
