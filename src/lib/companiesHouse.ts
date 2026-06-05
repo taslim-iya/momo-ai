@@ -576,10 +576,13 @@ export async function lookupCompaniesHouse(
     return known;
   }
 
-  // 2. Live backend. Two paths, tried in order:
+  // 2. Lovable Cloud edge function (real Companies House API).
+  const cloud = await lookupViaCloudFunction(trimmed);
+  if (cloud) return cloud;
+
+  // 3. Legacy backends, tried in order:
   //    a) VITE_PRICING_API_URL when explicitly set (dev/Python FastAPI).
-  //    b) Same-origin /api/company/{id} when deployed alongside a
-  //       serverless function (Vercel / Netlify / Cloudflare Pages).
+  //    b) Same-origin /api/company/{id} (Vercel / Netlify / CF Pages).
   if (BACKEND_URL) {
     const live = await lookupViaBackend(trimmed);
     if (live) return live;
@@ -587,12 +590,9 @@ export async function lookupCompaniesHouse(
   const sameOrigin = await lookupViaSameOrigin(trimmed);
   if (sameOrigin) return sameOrigin;
 
-  // 3. Deterministic mock keyed off the normalised number, so any
-  //    8-character input still produces something reasonable.
+  // 4. Deterministic mock keyed off the normalised number.
   const num = normaliseCompanyNumber(trimmed);
   if (!isValidCompanyNumberFormat(num)) return null;
-  if (!BACKEND_URL) {
-    await new Promise((r) => setTimeout(r, 650));
-  }
+  await new Promise((r) => setTimeout(r, 400));
   return lookupMock(num);
 }
