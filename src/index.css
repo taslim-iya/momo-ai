@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Inter as a true variable font (weight 100–900) so weight 510 renders correctly.
+   Sourced from Google Fonts' Inter variable woff2 (latin + latin-ext). */
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7SUc.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 @layer base {
   :root {
     /* Momo AI - cream paper, warm bark, persimmon */
@@ -57,8 +76,8 @@
     --shadow-glow: 0 0 0 1px hsl(25 88% 58% / 0.25), 0 16px 48px -12px hsl(25 88% 58% / 0.5);
 
     /* Type */
-    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-    --font-display: 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Inter Variable", "SF Pro Display", -apple-system, "system-ui", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    --font-display: "Inter Variable", "SF Pro Display", -apple-system, "system-ui", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
     --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -100,17 +119,22 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
+    font-weight: 400;
     font-feature-settings: "ss01", "cv11";
     font-optical-sizing: auto;
     letter-spacing: -0.005em;
   }
-  h1, h2, h3, h4 {
+  /* Headings and UI elements sit at the 510 variable weight; body copy stays 400. */
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     letter-spacing: -0.028em;
-    font-weight: 600;
+    font-weight: 510;
     line-height: 1.08;
   }
   h1 { letter-spacing: -0.035em; }
+  button, label {
+    font-weight: 510;
+  }
   .font-display { font-family: var(--font-display); }
   .font-mono { font-family: var(--font-mono); }
 
