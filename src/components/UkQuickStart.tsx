@@ -15,6 +15,7 @@ import {
   lookupCompaniesHouse,
   type CompaniesHouseCompany,
 } from "@/lib/companiesHouse";
+import { enrichFromWebsite, type WebsiteEnrichment } from "@/lib/websiteEnrich";
 import { buildRangedQuote, formatGBP, type RangedQuote } from "@/lib/pricing";
 import type { AnalysisInput, Report } from "@/lib/analyzer";
 import { generateReport } from "@/lib/analyzer";
