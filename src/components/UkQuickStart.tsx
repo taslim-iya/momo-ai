@@ -260,7 +260,7 @@ export function UkQuickStart({
                   <span className="text-sm text-muted-foreground"> / year</span>
                 </div>
                 <div className="text-[11px] text-muted-foreground mt-1">
-                  Confidence: low · based only on Companies House data. Tightens with more info.
+                  Confidence: {enrichment?.reachable ? "medium" : "low"} · {enrichment?.reachable ? "Companies House + your website" : "based only on Companies House data"}. Tightens with more info.
                 </div>
               </div>
               <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
