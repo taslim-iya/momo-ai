@@ -66,8 +66,8 @@ export default function Home() {
 
               {/* Subhead */}
               <Reveal delay={260}>
-                <p className="mt-8 max-w-xl text-xl leading-relaxed text-muted-foreground md:text-2xl">
-                  Momo finds the right business insurance for your company in minutes.{" "}
+                <p className="mt-8 max-w-xl whitespace-pre-wrap text-xl leading-relaxed text-muted-foreground md:text-2xl">
+                  Momo finds the right business insurance for your company in minutes.{"\n\n"}
                   <span className="font-medium text-ink">The right cover, at the right price, in minutes.</span>
                 </p>
               </Reveal>
